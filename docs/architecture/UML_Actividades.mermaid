@@ -1,0 +1,18 @@
+flowchart TD
+    Start([Inicio])
+    Login[Iniciar sesión o registrarse]
+    Avatar[Crear y personalizar avatar]
+    Nivel[Seleccionar nivel]
+    Preguntas[Responder preguntas del nivel]
+    Decision{¿Quedan niveles pendientes?}
+    Calculo[Calcular perfil Holland / Thurstone]
+    Resultado[Mostrar resultados y carreras sugeridas]
+    DecisionTest{¿Desea realizar el test tradicional?}
+    TestTradicional[Responder test psicométrico tradicional]
+    End([Fin])
+
+    Start --> Login --> Avatar --> Nivel --> Preguntas --> Decision
+    Decision -- Sí --> Nivel
+    Decision -- No --> Calculo --> Resultado --> DecisionTest
+    DecisionTest -- Sí --> TestTradicional --> End
+    DecisionTest -- No --> End

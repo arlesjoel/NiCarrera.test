@@ -1,0 +1,74 @@
+classDiagram
+    class Usuario {
+        +string idUsuario
+        +string nombre
+        +string correo
+        +string rol
+        iniciarSesion()
+        registrarse()
+    }
+
+    class Avatar {
+        +string idPersonaje
+        +string cabello
+        +string camisa
+        +string jean
+        +string accesorio
+        personalizar()
+    }
+
+    class Nivel {
+        +string idNivel
+        +int numero
+        +string nombre
+    }
+
+    class Pregunta {
+        +string idPregunta
+        +string texto
+        +bool esGamificada
+    }
+
+    class OpcionRespuesta {
+        +string idOpcion
+        +string texto
+        +int puntaje
+    }
+
+    class IntentoEvaluacion {
+        +string idIntento
+        +int puntajeR
+        +int puntajeI
+        +int puntajeA
+        +int puntajeS
+        +int puntajeE
+        +int puntajeC
+        +date fechaInicio
+        +date fechaFin
+    }
+
+    class Resultado {
+        +string idResultado
+        +string carrera
+        +string gradoConformidad
+    }
+
+    class SupabaseService {
+        login()
+        signUp()
+        getPreguntas(idNivel)
+        guardarIntento(intento)
+    }
+
+    class ScoreEngine {
+        calcularPerfilHolland(respuestas)
+    }
+
+    Usuario "1" -- "1" Avatar
+    Usuario "1" -- "0..*" IntentoEvaluacion
+    Nivel "1" -- "0..*" Pregunta
+    Pregunta "1" -- "1..*" OpcionRespuesta
+    IntentoEvaluacion "1" -- "0..*" Resultado
+    IntentoEvaluacion "1" -- "0..*" OpcionRespuesta : Detalle_Respuestas
+    ScoreEngine ..> IntentoEvaluacion : usa
+    SupabaseService ..> Usuario : autentica

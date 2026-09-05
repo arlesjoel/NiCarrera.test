@@ -1,0 +1,25 @@
+flowchart LR
+    Estudiante((Estudiante))
+    Admin((Administrador / Orientador))
+
+    subgraph Sistema["Sistema NiCarrera.Test"]
+        UC1([Registrarse / Iniciar sesión])
+        UC2([Personalizar avatar])
+        UC3([Jugar nivel])
+        UC4([Responder preguntas])
+        UC5([Ver resultados y carreras sugeridas])
+        UC6([Realizar test tradicional opcional])
+        UC7([Gestionar preguntas y carreras])
+        UC8([Gestionar usuarios y roles])
+    end
+
+    Estudiante --> UC1
+    Estudiante --> UC2
+    Estudiante --> UC3
+    Estudiante --> UC4
+    Estudiante --> UC5
+    Estudiante --> UC6
+
+    Admin --> UC1
+    Admin --> UC7
+    Admin --> UC8
