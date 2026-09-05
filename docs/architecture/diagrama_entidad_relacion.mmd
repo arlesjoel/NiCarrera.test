@@ -1,0 +1,165 @@
+erDiagram
+
+    ROLES {
+        uuid IdRol PK
+        text Nombre_Rol UK
+    }
+
+    USUARIOS {
+        uuid IdUsuario PK
+        uuid IdRol FK
+        text Nombre
+        text Correo UK
+        timestamptz Fecha_Registro
+    }
+
+    PERSONALIDADES_HOLLAND {
+        uuid IdPersonalidad PK
+        text Codigo_Holland UK
+        text Nombre_Personalidad
+        text Caracteristicas
+    }
+
+    NIVELES_JUEGO {
+        uuid IdNivel PK
+        int Numero_Nivel
+        text Nombre_Nivel
+        text Escenario_Background
+    }
+
+    CABELLOS {
+        uuid IdCabello PK
+        uuid IdPersonalidad FK
+        text Estilo_Nombre
+        text Color_Nombre
+        text Asset_Sprite
+    }
+
+    CAMISAS {
+        uuid IdCamisa PK
+        uuid IdPersonalidad FK
+        text Estilo_Nombre
+        text Color_Nombre
+        text Asset_Sprite
+    }
+
+    JEANS {
+        uuid IdJean PK
+        uuid IdPersonalidad FK
+        text Estilo_Nombre
+        text Color_Nombre
+        text Asset_Sprite
+    }
+
+    ACCESORIOS {
+        uuid IdAccesorio PK
+        uuid IdPersonalidad FK
+        uuid IdNivel FK
+        text Nombre_Accesorio
+        text Asset_Sprite
+    }
+
+    PERSONAJES_AVATAR {
+        uuid IdPersonaje PK
+        uuid IdUsuario FK
+        uuid IdCabello FK
+        uuid IdCamisa FK
+        uuid IdJean FK
+        uuid IdAccesorio FK
+    }
+
+    ACCESORIOS_DESBLOQUEADOS {
+        uuid IdDesbloqueo PK
+        uuid IdPersonaje FK
+        uuid IdAccesorio FK
+        timestamptz Fecha_Obtencion
+    }
+
+    PREGUNTAS {
+        uuid IdPregunta PK
+        uuid IdPersonalidad FK
+        uuid IdNivel FK
+        text Texto_Pregunta
+        boolean Es_Gamificada
+    }
+
+    OPCIONES_RESPUESTAS {
+        uuid IdOpcion PK
+        uuid IdPregunta FK
+        text Texto_Opcion
+        int Puntaje_Asignado
+    }
+
+    INTENTOS_EVALUACIONES {
+        uuid IdIntento PK
+        uuid IdUsuario FK
+        text Tipo_Evaluacion
+        text Codigo_Holland_Final
+        int Puntaje_R
+        int Puntaje_I
+        int Puntaje_A
+        int Puntaje_S
+        int Puntaje_E
+        int Puntaje_C
+        timestamptz Fecha_Inicio
+        timestamptz Fecha_Fin
+    }
+
+    DETALLE_RESPUESTAS_INTENTO {
+        uuid IdDetalle PK
+        uuid IdIntento FK
+        uuid IdPregunta FK
+        uuid IdOpcion FK
+    }
+
+    UNIVERSIDADES {
+        text Universidad PK
+        text Nombre_Universidad
+    }
+
+    CARRERAS {
+        uuid IdCarrera PK
+        text IdUniversidad FK
+        text Nombre_Carrera
+    }
+
+    RESULTADOS {
+        uuid IdResultado PK
+        uuid IdIntento FK
+        uuid IdCarrera FK
+        numeric Grado_Conformimdad
+    }
+
+
+    ROLES ||--o{ USUARIOS : "tiene"
+
+    USUARIOS ||--o{ PERSONAJES_AVATAR : "posee"
+    USUARIOS ||--o{ INTENTOS_EVALUACIONES : "realiza"
+
+    PERSONALIDADES_HOLLAND ||--o{ CABELLOS : "define"
+    PERSONALIDADES_HOLLAND ||--o{ CAMISAS : "define"
+    PERSONALIDADES_HOLLAND ||--o{ JEANS : "define"
+    PERSONALIDADES_HOLLAND ||--o{ ACCESORIOS : "define"
+    PERSONALIDADES_HOLLAND ||--o{ PREGUNTAS : "clasifica"
+
+    NIVELES_JUEGO ||--o{ ACCESORIOS : "desbloquea"
+    NIVELES_JUEGO ||--o{ PREGUNTAS : "contiene"
+
+    CABELLOS ||--o{ PERSONAJES_AVATAR : "seleccionado"
+    CAMISAS ||--o{ PERSONAJES_AVATAR : "seleccionada"
+    JEANS ||--o{ PERSONAJES_AVATAR : "seleccionado"
+    ACCESORIOS ||--o{ PERSONAJES_AVATAR : "equipado"
+
+    PERSONAJES_AVATAR ||--o{ ACCESORIOS_DESBLOQUEADOS : "desbloquea"
+    ACCESORIOS ||--o{ ACCESORIOS_DESBLOQUEADOS : "es_desbloqueado"
+
+    PREGUNTAS ||--o{ OPCIONES_RESPUESTAS : "tiene"
+
+    INTENTOS_EVALUACIONES ||--o{ DETALLE_RESPUESTAS_INTENTO : "contiene"
+    PREGUNTAS ||--o{ DETALLE_RESPUESTAS_INTENTO : "respondida"
+    OPCIONES_RESPUESTAS ||--o{ DETALLE_RESPUESTAS_INTENTO : "seleccionada"
+
+    UNIVERSIDADES ||--o{ CARRERAS : "ofrece"
+
+    INTENTOS_EVALUACIONES ||--o{ RESULTADOS : "genera"
+    CARRERAS ||--o{ RESULTADOS : "recomendada"
