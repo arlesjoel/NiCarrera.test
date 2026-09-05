@@ -1,57 +1,140 @@
-# NiCarrera.Test
-
-> Videojuego interactivo orientado al descubrimiento de habilidades y a la orientación vocacional dinámica en jóvenes.
-
+# README Técnico – NiCarrera.Test
+ 
+Documentación técnica del proyecto para que cualquier persona del equipo pueda instalar, entender y ejecutar el proyecto sin depender de explicaciones verbales.
+ 
 ---
-
-## 📑 Tabla de Contenidos
-1. [Descripción del Proyecto](#-descripción-del-proyecto)
-2. [Stack Tecnológico](#-stack-tecnológico)
-3. [Estructura de la Documentación](#-estructura-de-la-documentación)
-4. [Requisitos Previos](#-requisitos-previos)
-5. [Guía para Colaborar](#-guía-para-colaborar)
-6. [Hoja de Ruta (Roadmap)](#-hoja-de-ruta-roadmap)
-
+ 
+## 1. Descripción General
+ 
+**NiCarrera.Test** es un videojuego 2D de orientación vocacional. El estudiante crea un avatar, recorre niveles respondiendo preguntas basadas en los modelos de Holland (RIASEC) y Thurstone, y recibe un reporte de carreras sugeridas al finalizar.
+ 
 ---
-
-## 🎯 Descripción del Proyecto
-**NiCarrera.Test** es una propuesta lúdica e interactiva en forma de videojuego 2D, diseñada para acompañar a los jóvenes en su proceso de orientación vocacional. Mediante dinámicas de juego y toma de decisiones, la plataforma evalúa habilidades y competencias de forma continua y adaptativa, ofreciendo retroalimentación personalizada sobre posibles rutas académicas y profesionales.
-
+ 
+## 2. Arquitectura General
+ 
+El proyecto sigue una arquitectura cliente–backend simple:
+ 
+```mermaid
+flowchart LR
+    Cliente["Cliente - Phaser.js<br/>(usa assets de Tiled y Aseprite)"]
+    Backend[("Supabase<br/>Auth + PostgreSQL + Storage")]
+    Wrapper["Wrapper Móvil - Capacitor"]
+ 
+    Wrapper --> Cliente
+    Cliente <--> Backend
+```
+ 
+- **Cliente (Phaser.js):** contiene toda la lógica del juego, las escenas y la interfaz.
+- **Backend (Supabase):** maneja autenticación, base de datos (PostgreSQL) y almacenamiento de assets/resultados.
+- **Wrapper (Capacitor):** empaqueta el build web del juego como app nativa para Android/iOS.
 ---
-
-## 🛠️ Stack Tecnológico
-
-* **Motor de Juego (Frontend):** [Phaser.js](https://phaser.io/) (Framework 2D en JavaScript/TypeScript)
-* **Backend & Base de Datos:** [Supabase](https://supabase.com/) (Autenticación, base de datos PostgreSQL en tiempo real y almacenamiento)
-* **Diseño de Mapas y Niveles:** [Tiled](https://www.mapeditor.org/) (Editor de mapas de azulejos / Tilemaps)
-* **Arte y Artefactos 2D:** [Aseprite](https://www.aseprite.org/) (Diseño de Pixel Art y animación de sprites)
-
+ 
+## 3. Stack Tecnológico y Dependencias
+ 
+| Herramienta | Uso |
+|---|---|
+| Phaser.js | Motor del juego (2D) |
+| Supabase | Backend, autenticación y base de datos |
+| Vite | Bundler / entorno de desarrollo |
+| Capacitor | Wrapper para publicar en Android/iOS |
+| Tiled | Diseño de mapas y niveles (exporta `.json`/`.tmj`) |
+| Aseprite | Arte y animaciones (exporta `.png`/`.json`) |
+ 
+Dependencias principales (`package.json`):
+ 
+```json
+{
+  "dependencies": {
+    "phaser": "^3.80.0",
+    "@supabase/supabase-js": "^2.45.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
+```
+ 
+> Ajustar las versiones exactas según lo que se instale en el proyecto real.
+ 
 ---
-
-## 📂 Estructura de la Documentación
-Al estar en etapa de definición, el repositorio albergará principalmente artefactos de diseño y arquitectura. Próximamente se integrarán:
-
-* `/docs/design`: Documento de Diseño del Juego (GDD - Game Design Document).
-* `/docs/architecture`: Diagramas de flujo de datos y modelo Entidad-Relación de Supabase.
-* `/docs/assets`: Guía de estilos de arte y especificaciones de exportación desde Aseprite/Tiled.
-
+ 
+## 4. Variables de Entorno
+ 
+Crear un archivo `.env` en la raíz (basado en `.env.example`, que sí se sube al repo):
+ 
+```
+VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
+VITE_SUPABASE_ANON_KEY=tu-anon-key-aqui
+```
+ 
+**Importante:** el archivo `.env` real nunca se sube al repositorio (agregarlo a `.gitignore`).
+ 
 ---
-
-## 💻 Requisitos Previos
-Para trabajar en este proyecto una vez iniciado el desarrollo, se requerirá:
-
-* **Node.js** (Versión LTS recomendada)
-* **Editor Tiled** (Para la lectura y edición de archivos `.json` / `.tmx` de mapas)
-* **Cuenta en Supabase** (Para configuración de entorno local o de prueba)
-* **Aseprite** (Para edición de archivos de origen `.aseprite` o `.ase`)
-
+ 
+## 5. Estructura del Proyecto
+ 
+```
+/src
+  /scenes        → Escenas de Phaser (BootScene, AvatarScene, LevelScene, ResultScene)
+  /entities      → Clases del juego (Avatar, Pregunta, IntentoEvaluacion)
+  /services      → Conexión y llamadas a Supabase (supabaseClient.js, authService.js)
+  /assets
+    /maps        → Mapas exportados desde Tiled
+    /sprites     → Sprites y animaciones exportados desde Aseprite
+  main.js        → Punto de entrada de Phaser
+/docs
+  /design        → Game Design Document (GDD)
+  /architecture  → ER + los 3 diagramas UML (casos de uso, actividades, clases)
+.env.example
+package.json
+```
+ 
 ---
-
-## 🗺️ Hoja de Ruta (Roadmap)
-
-- [x] Definición conceptual e idea del proyecto.
-- [/] Elaboración del Game Design Document (GDD).
-- [ ] Diseño de mockups y mapas preliminares en Tiled.
-- [ ] Definición del esquema de base de datos en Supabase.
-- [ ] Setup inicial del proyecto con Phaser.js.
-- [ ] Desarrollo del primer prototipo (MVP).
+ 
+## 6. Scripts Disponibles
+ 
+| Comando | Descripción |
+|---|---|
+| `npm install` | Instala las dependencias |
+| `npm run dev` | Levanta el entorno de desarrollo local |
+| `npm run build` | Genera el build de producción |
+| `npx cap sync` | Sincroniza el build con el proyecto nativo (Capacitor) |
+ 
+---
+ 
+## 7. Ejemplos de Endpoints (Supabase)
+ 
+**Registro de usuario:**
+```js
+const { data, error } = await supabase.auth.signUp({ email, password });
+```
+ 
+**Consultar preguntas de un nivel:**
+```js
+const { data, error } = await supabase
+  .from('Preguntas')
+  .select('*')
+  .eq('IdNivel', nivelActual);
+```
+ 
+**Guardar un intento de evaluación:**
+```js
+const { data, error } = await supabase
+  .from('Intentos_Evaluaciones')
+  .insert([{ IdUsuario: userId, Tipo_Evaluacion: 'Holland' }]);
+```
+ 
+---
+ 
+## 8. Instalación y Ejecución Local
+ 
+1. Clonar el repositorio.
+2. Ejecutar `npm install`.
+3. Copiar `.env.example` a `.env` y completar las credenciales de Supabase.
+4. Ejecutar `npm run dev`.
+---
+ 
+## 9. Notas para producción
+ 
+- Usar proyectos Supabase separados para desarrollo y producción.
+- Antes de publicar, correr `npm run build` y luego `npx cap sync` para actualizar el proyecto nativo.
